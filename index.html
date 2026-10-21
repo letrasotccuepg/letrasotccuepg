@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DEFESAS DE TCC - 2026 • LETRAS UEPG</title>
+  <meta name="description"
+    content="Portal de consulta de bancas, horários e salas das defesas de TCC 2026 do Departamento de Estudos da Linguagem (DELEM) da UEPG.">
+  <meta name="theme-color" content="#0f2b48">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Header Institucional -->
+  <header class="top-nav">
+    <div class="nav-container">
+      <div class="brand-group">
+        <div class="brand-badge">UEPG</div>
+        <div class="brand-text">
+          <span class="univ-name">Universidade Estadual de Ponta Grossa</span>
+          <span class="dept-name">LETRAS/UEPG • Defesas de TCC - 2026</span>
+        </div>
+      </div>
+      <div class="nav-actions">
+        <button id="themeToggle" class="btn-icon" title="Alternar tema claro/escuro" aria-label="Alternar tema">
+          <svg class="sun-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <circle cx="12" cy="12" r="5" />
+            <path
+              d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+          </svg>
+          <svg class="moon-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        </button>
+        <button id="printBtn" class="btn-secondary" title="Imprimir cronograma">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 6 2 18 2 18 9" />
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+            <rect x="6" y="14" width="12" height="8" />
+          </svg>
+          <span>Imprimir</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section & Stats -->
+  <main class="main-content">
+    <section class="hero-section">
+      <div class="hero-tag">Cronograma Oficial de Apresentações</div>
+      <h1 class="hero-title">Defesas de Trabalho de Conclusão de Curso</h1>
+      <p class="hero-desc">Consulte horários, salas, bancas examinadoras e orientadores dos turnos Vespertino e Noturno.
+      </p>
+
+      <!-- Métricas em destaque -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="statTotalBancas">--</div>
+          <div class="stat-label">Bancas Totais</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="statVespBancas">--</div>
+          <div class="stat-label">Vespertino (Seg/Ter)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="statNotBancas">--</div>
+          <div class="stat-label">Noturno (Seg/Sex)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="statProfs">--</div>
+          <div class="stat-label">Docentes Envolvidos</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Controles de Visualização e Busca -->
+    <section class="controls-panel">
+      <!-- Seletor de Modo de Visualização -->
+      <div class="view-tabs" role="tablist">
+        <button class="tab-btn active" data-view="cards" id="tabCards" role="tab" aria-selected="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" />
+            <rect x="14" y="3" width="7" height="7" />
+            <rect x="14" y="14" width="7" height="7" />
+            <rect x="3" y="14" width="7" height="7" />
+          </svg>
+          <span>Todas as Bancas</span>
+        </button>
+        <button class="tab-btn" data-view="professor" id="tabProfessor" role="tab" aria-selected="false">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          <span>Por Professor</span>
+        </button>
+        <button class="tab-btn" data-view="salas" id="tabSalas" role="tab" aria-selected="false">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="16" rx="2" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+            <line x1="10" y1="4" x2="10" y2="20" />
+          </svg>
+          <span>Grade de Salas</span>
+        </button>
+      </div>
+
+      <!-- Barra de Busca -->
+      <div class="search-box">
+        <svg class="search-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+          stroke-width="2">
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input type="text" id="searchInput" placeholder="Buscar por aluno, orientador, membro, título, sala..."
+          autocomplete="off">
+        <button id="clearSearch" class="btn-clear" title="Limpar busca" style="display: none;">&times;</button>
+      </div>
+
+      <!-- Filtros Rápidos (Chips) -->
+      <div class="filter-row">
+        <div class="filter-group">
+          <span class="filter-title">Dia:</span>
+          <div class="chip-container" id="dayFilter">
+            <button class="chip active" data-filter="dia" data-value="all">Todos</button>
+            <button class="chip" data-filter="dia" data-value="Segunda">Segunda</button>
+            <button class="chip" data-filter="dia" data-value="Terça">Terça</button>
+            <button class="chip" data-filter="dia" data-value="Sexta">Sexta</button>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-title">Turno:</span>
+          <div class="chip-container" id="turnoFilter">
+            <button class="chip active" data-filter="turno" data-value="all">Todos</button>
+            <button class="chip" data-filter="turno" data-value="VESPERTINO">Vespertino</button>
+            <button class="chip" data-filter="turno" data-value="NOTURNO">Noturno</button>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-title">Área:</span>
+          <div class="chip-container" id="areaFilter">
+            <button class="chip active" data-filter="area" data-value="all">Todas</button>
+            <button class="chip" data-filter="area" data-value="LITERATURA">Literatura</button>
+            <button class="chip" data-filter="area" data-value="LINGUÍSTICA">Linguística</button>
+            <button class="chip" data-filter="area" data-value="LIBRAS">Libras</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Indicador de Resultados -->
+    <div class="results-bar">
+      <span id="resultsCount">Carregando bancas...</span>
+      <button id="resetFilters" class="btn-text" style="display: none;">Limpar filtros</button>
+    </div>
+
+    <!-- VIEW 1: Cards Grid -->
+    <section id="viewCards" class="view-panel active">
+      <div class="cards-grid" id="bancasContainer">
+        <!-- Renderizado dinamicamente via app.js -->
+      </div>
+    </section>
+
+    <!-- VIEW 2: Por Professor -->
+    <section id="viewProfessor" class="view-panel">
+      <div class="professor-selector-card">
+        <label for="profSelect" class="form-label">Selecione o Docente para ver sua agenda completa:</label>
+        <div class="select-wrapper">
+          <select id="profSelect">
+            <option value="">-- Escolha um Professor --</option>
+          </select>
+        </div>
+        <div id="profSummary" class="prof-summary" style="display: none;">
+          <!-- Resumo do professor -->
+        </div>
+      </div>
+      <div id="profBancasContainer" class="cards-grid">
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          <h3>Selecione um professor acima</h3>
+          <p>Você verá a linha do tempo com todas as bancas em que ele atua como orientador ou membro.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: Grade de Salas -->
+    <section id="viewSalas" class="view-panel">
+      <div class="salas-day-selector">
+        <button class="day-tab-btn active" data-salas-day="Segunda">Segunda-feira</button>
+        <button class="day-tab-btn" data-salas-day="Terça">Terça-feira (Vesp)</button>
+        <button class="day-tab-btn" data-salas-day="Sexta">Sexta-feira (Not)</button>
+      </div>
+      <div class="table-responsive">
+        <table class="grid-table" id="salasGridTable">
+          <!-- Renderizado via app.js -->
+        </table>
+      </div>
+    </section>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast" role="alert" aria-live="assertive"></div>
+  </main>
+
+  <!-- Rodapé Institucional -->
+  <footer class="main-footer">
+    <div class="footer-container">
+      <div class="footer-info">
+        <h3>Universidade Estadual de Ponta Grossa</h3>
+        <p>Setor de Ciências Humanas, Letras e Artes (SECHLA) • Bloco B • Campus Central</p>
+        <p class="footer-small">Horários: Vespertino (13h50 - 17h20) | Noturno (18h50 - 22h15)</p>
+      </div>
+      <div class="footer-downloads">
+        <span class="download-title">Arquivos Oficiais:</span>
+        <div class="download-links">
+          <a href="Cronograma_VESPERTINO.xlsx" download class="file-link">📊 Planilha Vespertino (.xlsx)</a>
+          <a href="Relatorio_VESPERTINO.docx" download class="file-link">📄 Relatório Vespertino (.docx)</a>
+          <a href="Cronograma_NOTURNO.xlsx" download class="file-link">📊 Planilha Noturno (.xlsx)</a>
+          <a href="Relatorio_NOTURNO.docx" download class="file-link">📄 Relatório Noturno (.docx)</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Desenvolvido para as Defesas de TCC UEPG 2026 • Sincronizado automaticamente</p>
+    </div>
+  </footer>
+
+  <!-- Carregamento dos dados -->
+  <script src="bancas_data.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
