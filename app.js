@@ -107,10 +107,12 @@
     statVespBancas.textContent = bancasData.filter(b => b.turno === 'VESPERTINO').length;
     statNotBancas.textContent = bancasData.filter(b => b.turno === 'NOTURNO').length;
 
-    // Contagem de professores únicos
+    // Contagem de profissionais únicos (Orientadores, Coorientadores, Membros, TILSP)
     const profs = new Set();
     bancasData.forEach(b => {
       if (b.orientador) profs.add(b.orientador);
+      if (b.coorientador) profs.add(b.coorientador);
+      if (b.tilsp) profs.add(b.tilsp);
       if (b.membros) b.membros.forEach(m => profs.add(m));
     });
     statProfs.textContent = profs.size;
@@ -143,10 +145,12 @@
       if (q) {
         const matchAluno = normalizeText(b.aluno).includes(q);
         const matchOri = normalizeText(b.orientador).includes(q);
+        const matchCoori = b.coorientador && normalizeText(b.coorientador).includes(q);
+        const matchTilsp = b.tilsp && normalizeText(b.tilsp).includes(q);
         const matchTitulo = normalizeText(b.titulo).includes(q);
         const matchSala = normalizeText(b.sala).includes(q);
         const matchMembros = b.membros && b.membros.some(m => normalizeText(m).includes(q));
-        if (!matchAluno && !matchOri && !matchTitulo && !matchSala && !matchMembros) {
+        if (!matchAluno && !matchOri && !matchCoori && !matchTilsp && !matchTitulo && !matchSala && !matchMembros) {
           return false;
         }
       }
@@ -192,6 +196,13 @@
     const areaClass = `tag-area-${normalizeText(b.area)}`;
     const turnoClass = `tag-${normalizeText(b.turno)}`;
 
+    const coorientadorHTML = b.coorientador ? `
+      <div class="person-row">
+        <span class="person-label">Avaliador/Coorientador:</span>
+        <span class="person-name">${escapeHTML(b.coorientador)}</span>
+      </div>
+    ` : '';
+
     const membrosHTML = b.membros && b.membros.length > 0
       ? b.membros.map(m => `
           <div class="person-row">
@@ -201,9 +212,22 @@
         `).join('')
       : '';
 
+    const tilspHTML = b.tilsp ? `
+      <div class="person-row">
+        <span class="person-label">Intérprete TILSP:</span>
+        <span class="person-name tilsp">🤟 ${escapeHTML(b.tilsp)}</span>
+      </div>
+    ` : '';
+
     let roleTag = '';
     if (highlightRole) {
-      roleTag = `<span class="role-badge ${highlightRole === 'Orientador' ? 'role-orientador' : 'role-membro'}">${highlightRole}</span>`;
+      let roleClass = 'role-membro';
+      if (highlightRole === 'Orientador') roleClass = 'role-orientador';
+      else if (highlightRole === 'Coorientador') roleClass = 'role-coorientador';
+      else if (highlightRole === 'TILSP') roleClass = 'role-tilsp';
+
+      const displayRole = highlightRole === 'Coorientador' ? 'Avaliador/Coorientador' : highlightRole;
+      roleTag = `<span class="role-badge ${roleClass}">${displayRole}</span>`;
     }
 
     return `
@@ -222,6 +246,7 @@
             <span class="tag ${turnoClass}">${b.turno}</span>
             <span class="tag ${areaClass}">${b.area}</span>
             ${b.hibrida ? '<span class="tag tag-hibrida">Híbrida 💻</span>' : ''}
+            ${b.tilsp ? '<span class="tag tag-tilsp">TILSP 🤟</span>' : ''}
           </div>
 
           <h3 class="tcc-title" title="${escapeHTML(b.titulo)}">${escapeHTML(b.titulo)}</h3>
@@ -235,7 +260,9 @@
               <span class="person-label">Orientador:</span>
               <span class="person-name">${escapeHTML(b.orientador)}</span>
             </div>
+            ${coorientadorHTML}
             ${membrosHTML}
+            ${tilspHTML}
           </div>
         </div>
 
@@ -262,11 +289,13 @@
     const profs = new Set();
     bancasData.forEach(b => {
       if (b.orientador) profs.add(b.orientador);
+      if (b.coorientador) profs.add(b.coorientador);
+      if (b.tilsp) profs.add(b.tilsp);
       if (b.membros) b.membros.forEach(m => profs.add(m));
     });
 
     const sortedProfs = Array.from(profs).sort((a, b) => a.localeCompare(b, 'pt-BR'));
-    profSelect.innerHTML = '<option value="">-- Escolha um Professor --</option>' +
+    profSelect.innerHTML = '<option value="">-- Escolha um Professor / Intérprete --</option>' +
       sortedProfs.map(p => `<option value="${escapeHTML(p)}">${escapeHTML(p)}</option>`).join('');
   }
 
@@ -286,7 +315,7 @@
 
     const dayOrder = { 'Segunda': 1, 'Terça': 2, 'Sexta': 3 };
     const profBancas = bancasData
-      .filter(b => b.orientador === selected || (b.membros && b.membros.includes(selected)))
+      .filter(b => b.orientador === selected || b.coorientador === selected || b.tilsp === selected || (b.membros && b.membros.includes(selected)))
       .sort((a, b) => {
         const dayA = dayOrder[a.dia] || 99;
         const dayB = dayOrder[b.dia] || 99;
@@ -295,26 +324,49 @@
       });
 
     const asAdvisor = profBancas.filter(b => b.orientador === selected).length;
-    const asMember = profBancas.length - asAdvisor;
+    const asCoorientador = profBancas.filter(b => b.coorientador === selected).length;
+    const asTilsp = profBancas.filter(b => b.tilsp === selected).length;
+    const asMember = profBancas.length - asAdvisor - asCoorientador - asTilsp;
 
     profSummary.style.display = 'flex';
-    profSummary.innerHTML = `
+    let metricsHTML = `
       <div class="prof-metric">
         <span class="prof-metric-val">${profBancas.length}</span>
         <span class="prof-metric-label">Bancas Totais</span>
       </div>
+    `;
+    if (asAdvisor > 0) metricsHTML += `
       <div class="prof-metric">
         <span class="prof-metric-val">${asAdvisor}</span>
         <span class="prof-metric-label">Como Orientador(a)</span>
       </div>
+    `;
+    if (asCoorientador > 0) metricsHTML += `
+      <div class="prof-metric">
+        <span class="prof-metric-val">${asCoorientador}</span>
+        <span class="prof-metric-label">Como Avaliador/Coorientador</span>
+      </div>
+    `;
+    if (asMember > 0) metricsHTML += `
       <div class="prof-metric">
         <span class="prof-metric-val">${asMember}</span>
         <span class="prof-metric-label">Como Membro Avaliador</span>
       </div>
     `;
+    if (asTilsp > 0) metricsHTML += `
+      <div class="prof-metric">
+        <span class="prof-metric-val">${asTilsp}</span>
+        <span class="prof-metric-label">Como Intérprete TILSP</span>
+      </div>
+    `;
+    profSummary.innerHTML = metricsHTML;
 
     profBancasContainer.innerHTML = profBancas.map(b => {
-      const role = b.orientador === selected ? 'Orientador' : 'Membro Avaliador';
+      let role;
+      if (b.orientador === selected) role = 'Orientador';
+      else if (b.coorientador === selected) role = 'Coorientador';
+      else if (b.tilsp === selected) role = 'TILSP';
+      else role = 'Membro Avaliador';
       return createBancaCardHTML(b, role);
     }).join('');
   }
@@ -346,7 +398,7 @@
             bodyHTML += `
               <div class="room-cell-entry">
                 <div class="student">${escapeHTML(m.aluno)}</div>
-                <div class="advisor">Ori: ${escapeHTML(m.orientador)}</div>
+                <div class="advisor">Prof: ${escapeHTML(m.orientador)}</div>
               </div>
             `;
           });

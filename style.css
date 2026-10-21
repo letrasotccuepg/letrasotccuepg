@@ -606,8 +606,10 @@ body {
 .tag-vespertino { background: var(--vesp-bg); color: var(--vesp-text); border: 1px solid var(--vesp-border); }
 .tag-noturno { background: var(--not-bg); color: var(--not-text); border: 1px solid var(--not-border); }
 .tag-hibrida { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+.tag-tilsp { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
 
 [data-theme="dark"] .tag-hibrida { background: #7f1d1d; color: #fecaca; border: 1px solid #991b1b; }
+[data-theme="dark"] .tag-tilsp { background: #064e3b; color: #6ee7b7; border: 1px solid #047857; }
 
 .tcc-title {
   font-family: var(--font-heading);
@@ -642,7 +644,8 @@ body {
   font-weight: 700;
   text-transform: uppercase;
   color: var(--text-muted);
-  min-width: 78px;
+  flex-shrink: 0;
+  min-width: 80px;
 }
 
 .person-name {
@@ -653,6 +656,15 @@ body {
 .person-name.student {
   font-weight: 700;
   color: var(--uepg-blue-accent);
+}
+
+.person-name.tilsp {
+  font-weight: 700;
+  color: #059669;
+}
+
+[data-theme="dark"] .person-name.tilsp {
+  color: #34d399;
 }
 
 .card-actions {
@@ -762,13 +774,25 @@ body {
   color: #1e40af;
 }
 
+.role-coorientador {
+  background: #fef3c7;
+  color: #92400e;
+}
+
 .role-membro {
   background: #f1f5f9;
   color: #475569;
 }
 
+.role-tilsp {
+  background: #d1fae5;
+  color: #065f46;
+}
+
 [data-theme="dark"] .role-orientador { background: #1e3a8a; color: #bfdbfe; }
+[data-theme="dark"] .role-coorientador { background: #78350f; color: #fef3c7; }
 [data-theme="dark"] .role-membro { background: #334155; color: #cbd5e1; }
+[data-theme="dark"] .role-tilsp { background: #064e3b; color: #6ee7b7; }
 
 /* Empty state */
 .empty-state {
