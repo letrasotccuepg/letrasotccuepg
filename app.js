@@ -22,9 +22,9 @@
   // Mapeamento de datas para o Google Agenda / .ics (Semana de Defesas 2026)
   // Altere estas datas caso a coordenação defina uma semana específica no calendário letivo:
   const DEFENSE_DATES = {
-    'Segunda': '2026-11-23',
-    'Terça': '2026-11-24',
-    'Sexta': '2026-11-27'
+    'Segunda': '2026-10-26',
+    'Terça': '2026-10-27',
+    'Sexta': '2026-10-30'
   };
 
   // --- Elementos do DOM ---
