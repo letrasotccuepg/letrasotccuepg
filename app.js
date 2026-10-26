@@ -198,7 +198,7 @@
 
     const coorientadorHTML = b.coorientador ? `
       <div class="person-row">
-        <span class="person-label">Avaliador/Coorientador:</span>
+        <span class="person-label">Coorientadora:</span>
         <span class="person-name">${escapeHTML(b.coorientador)}</span>
       </div>
     ` : '';
@@ -206,7 +206,7 @@
     const membrosHTML = b.membros && b.membros.length > 0
       ? b.membros.map(m => `
           <div class="person-row">
-            <span class="person-label">Avaliador:</span>
+            <span class="person-label">Avaliador(a):</span>
             <span class="person-name">${escapeHTML(m)}</span>
           </div>
         `).join('')
@@ -253,11 +253,11 @@
 
           <div class="people-block">
             <div class="person-row">
-              <span class="person-label">Aluno:</span>
+              <span class="person-label">Aluno(a):</span>
               <span class="person-name student">${escapeHTML(b.aluno)}</span>
             </div>
             <div class="person-row">
-              <span class="person-label">Orientador:</span>
+              <span class="person-label">Orientador(a):</span>
               <span class="person-name">${escapeHTML(b.orientador)}</span>
             </div>
             ${coorientadorHTML}
