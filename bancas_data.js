@@ -879,7 +879,7 @@ window.BANCAS_DATA = [
     "ord": 26,
     "dia": "Sexta",
     "turno": "NOTURNO",
-    "horario": "18:50",
+    "horario": "20:00",
     "sala": "B214",
     "area": "LIBRAS",
     "orientador": "Rúbia Carla da Silva",
